@@ -193,6 +193,43 @@ function App() {
             </Routes>
           )}
         </Container>
+        <Box
+          sx={{
+            position: 'fixed',
+            bottom: { xs: 16, md: 24 },
+            right: { xs: 16, md: 32 },
+            background: 'rgba(255,255,255,0.85)',
+            borderRadius: '999px',
+            px: { xs: 3, md: 3.75 },
+            py: { xs: 1, md: 1.15 },
+            boxShadow: '0 20px 44px -26px rgba(76,96,255,0.6)',
+            backdropFilter: 'blur(6px)',
+            border: '1px solid rgba(76,96,255,0.16)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: (theme) => theme.zIndex.tooltip + 1,
+            pointerEvents: 'none',
+          }}
+        >
+          <Typography
+            variant="subtitle2"
+            sx={{
+              fontWeight: 600,
+              fontStyle: 'italic',
+              letterSpacing: 0.6,
+              fontFamily: "'Segoe Script', 'Apple Chancery', cursive",
+              textTransform: 'none',
+              px: 0.5,
+              color: 'text.primary',
+            }}
+          >
+            Created By -{' '}
+            <Box component="span" sx={{ color: 'primary.main' }}>
+              Dev Jadaun
+            </Box>
+          </Typography>
+        </Box>
       </Box>
     </Router>
   );

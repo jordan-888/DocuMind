@@ -58,6 +58,14 @@ const heroHighlights = [
   },
 ];
 
+const cardContentPadding = {
+  px: { xs: 3, md: 3.5 },
+  py: { xs: 3, md: 3.5 },
+  '&:last-child': {
+    pb: { xs: 3, md: 3.5 },
+  },
+} as const;
+
 const workflowHighlights = [
   {
     icon: <CodeRoundedIcon fontSize="small" />,
@@ -169,7 +177,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 boxShadow: '0 30px 80px -60px rgba(76,96,255,0.4)',
               }}
             >
-              <CardContent>
+              <CardContent sx={cardContentPadding}>
                 <Stack spacing={3}>
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Typography variant="subtitle2" color="text.secondary">
@@ -253,7 +261,8 @@ const Dashboard: React.FC<DashboardProps> = ({
           </Box>
         </Stack>
       </Paper>
-\n      <Box
+
+      <Box
         sx={{
           display: 'grid',
           gap: 3,
@@ -266,7 +275,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       >
         {metricCards.map((metric) => (
           <Card key={metric.label} variant="outlined" sx={{ borderRadius: 4 }}>
-            <CardContent>
+            <CardContent sx={cardContentPadding}>
               <Typography variant="caption" color="text.secondary">
                 {metric.label}
               </Typography>
@@ -285,7 +294,7 @@ const Dashboard: React.FC<DashboardProps> = ({
         <Stack spacing={4} flex={{ xl: 1.5 }}>
           <Card variant="outlined" sx={{ borderRadius: 4, overflow: 'hidden' }}>
             <Box sx={{ height: 4, backgroundImage: 'linear-gradient(90deg, #4c60ff, #06b6d4)' }} />
-            <CardContent>
+            <CardContent sx={cardContentPadding}>
               <Stack spacing={3}>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="space-between">
                   <Stack spacing={1}>
@@ -314,7 +323,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={4} alignItems="stretch">
             <Card variant="outlined" sx={{ borderRadius: 4, overflow: 'hidden', flex: 1 }}>
               <Box sx={{ height: 4, backgroundImage: 'linear-gradient(90deg, #4c60ff, #312e81)' }} />
-              <CardContent>
+              <CardContent sx={cardContentPadding}>
                 <Stack spacing={3}>
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Typography variant="h5" fontWeight={600}>
@@ -339,7 +348,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             </Card>
             <Card variant="outlined" sx={{ borderRadius: 4, overflow: 'hidden', flex: 1 }}>
               <Box sx={{ height: 4, backgroundImage: 'linear-gradient(90deg, #06b6d4, #4c60ff)' }} />
-              <CardContent>
+              <CardContent sx={cardContentPadding}>
                 <Stack spacing={3}>
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Typography variant="h5" fontWeight={600}>
@@ -367,7 +376,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
         <Stack spacing={4} flex={{ xl: 1 }}>
           <Card variant="outlined" sx={{ borderRadius: 4 }}>
-            <CardContent>
+            <CardContent sx={cardContentPadding}>
               <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Stack spacing={0.5}>
                   <Typography variant="h6" fontWeight={600}>
@@ -400,7 +409,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               background: 'linear-gradient(135deg,rgba(99,102,241,0.08),rgba(6,182,212,0.1))',
             }}
           >
-            <CardContent>
+            <CardContent sx={cardContentPadding}>
               <Stack spacing={2.5}>
                 <Typography variant="h6" fontWeight={600}>
                   Blueprint your knowledge workflows
