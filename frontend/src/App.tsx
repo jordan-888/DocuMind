@@ -170,9 +170,61 @@ function App() {
         <Header user={user} />
         <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 }, px: { xs: 3, md: 4 } }}>
           {!user ? (
-            <Stack alignItems="center" justifyContent="center">
-              <Box width={{ xs: '100%', sm: '85%', md: '70%' }}>
-                <Auth />
+            <Stack
+              spacing={{ xs: 4, md: 6 }}
+              sx={{
+                position: 'relative',
+                minHeight: { xs: '70vh', md: '75vh' },
+                pb: { xs: 6, md: 8 },
+              }}
+            >
+              <Stack alignItems="center" justifyContent="center" flexGrow={1}>
+                <Box width={{ xs: '100%', sm: '85%', md: '70%' }}>
+                  <Auth />
+                </Box>
+              </Stack>
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: 0,
+                  right: 0,
+                  background: 'rgba(255,255,255,0.82)',
+                  borderRadius: '999px',
+                  px: { xs: 2.5, md: 3.25 },
+                  py: { xs: 0.9, md: 1.05 },
+                  boxShadow: '0 16px 32px -24px rgba(76,96,255,0.55)',
+                  border: '1px solid rgba(76,96,255,0.18)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mr: { xs: 0, md: 2 },
+                }}
+              >
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    fontWeight: 600,
+                    fontStyle: 'italic',
+                    letterSpacing: 0.4,
+                    fontFamily: "'Segoe Script', 'Apple Chancery', cursive",
+                    textTransform: 'none',
+                    color: 'text.primary',
+                    fontSize: { xs: '0.8rem', md: '0.85rem' },
+                  }}
+                >
+                  Created By -{' '}
+                  <Typography
+                    component="span"
+                    sx={{
+                      color: 'primary.main',
+                      fontFamily: "'Segoe Script', 'Apple Chancery', cursive",
+                      fontStyle: 'inherit',
+                      fontWeight: 'inherit',
+                    }}
+                  >
+                    Dev Jadaun
+                  </Typography>
+                </Typography>
               </Box>
             </Stack>
           ) : (
@@ -193,43 +245,6 @@ function App() {
             </Routes>
           )}
         </Container>
-        <Box
-          sx={{
-            position: 'fixed',
-            bottom: { xs: 16, md: 24 },
-            right: { xs: 16, md: 32 },
-            background: 'rgba(255,255,255,0.85)',
-            borderRadius: '999px',
-            px: { xs: 3, md: 3.75 },
-            py: { xs: 1, md: 1.15 },
-            boxShadow: '0 20px 44px -26px rgba(76,96,255,0.6)',
-            backdropFilter: 'blur(6px)',
-            border: '1px solid rgba(76,96,255,0.16)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: (theme) => theme.zIndex.tooltip + 1,
-            pointerEvents: 'none',
-          }}
-        >
-          <Typography
-            variant="subtitle2"
-            sx={{
-              fontWeight: 600,
-              fontStyle: 'italic',
-              letterSpacing: 0.6,
-              fontFamily: "'Segoe Script', 'Apple Chancery', cursive",
-              textTransform: 'none',
-              px: 0.5,
-              color: 'text.primary',
-            }}
-          >
-            Created By -{' '}
-            <Box component="span" sx={{ color: 'primary.main' }}>
-              Dev Jadaun
-            </Box>
-          </Typography>
-        </Box>
       </Box>
     </Router>
   );
