@@ -1,0 +1,13 @@
+{
+    "embedding_model": {
+        "name": "sentence-transformers/all-MiniLM-L6-v2",
+        "version": "2.2.2",
+        "dimension": 384,
+        "reason": "Good balance of speed and quality for document embeddings"
+    },
+    "summarization_model": {
+        "name": "sshleifer/distilbart-cnn-12-6",
+        "version": "4.33.2",
+        "reason": "Efficient summarization for web deployment"
+    }
+}
