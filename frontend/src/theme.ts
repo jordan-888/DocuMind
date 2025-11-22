@@ -27,6 +27,7 @@ const customShadows: Shadows = [
   '0 66px 155px rgba(15, 23, 42, 0.23)',
   '0 68px 160px rgba(15, 23, 42, 0.24)',
   '0 70px 165px rgba(15, 23, 42, 0.25)',
+];
 
 // Modern DocuMind Theme - Inspired by contemporary SaaS applications
 const theme = createTheme({
