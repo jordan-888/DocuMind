@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from sqlalchemy.exc import SQLAlchemyError
-from app.api.routers import documents, users
+from app.api.routers import documents, users, chat
 from app.core.config import settings
 from app.models.schemas import ErrorDetail
 import time
@@ -98,6 +98,11 @@ app.include_router(
     users.router,
     prefix="/api/v1/auth",
     tags=["auth"]
+)
+app.include_router(
+    chat.router,
+    prefix="/api/v1/chat",
+    tags=["chat"]
 )
 
 @app.get(

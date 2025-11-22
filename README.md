@@ -132,6 +132,7 @@ redis-server
 ### **✅ Core Features**
 - **Document Upload**: PDF processing with real-time status tracking
 - **Semantic Search**: Natural language search across all documents
+- **AI Chat Assistant**: Conversational interface to query documents with context
 - **AI Summarization**: RAG-powered document summarization
 - **User Authentication**: Secure login/signup with Supabase
 - **Document Management**: View, organize, and manage uploaded documents

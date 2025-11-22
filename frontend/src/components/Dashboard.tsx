@@ -33,6 +33,7 @@ const DocumentUpload = lazy(() => import('./DocumentUpload'));
 const SearchInterface = lazy(() => import('./SearchInterface'));
 const SummarizeInterface = lazy(() => import('./SummarizeInterface'));
 const DocumentsList = lazy(() => import('./DocumentsList'));
+const ChatInterface = lazy(() => import('./ChatInterface'));
 
 interface DashboardProps {
   documents: Document[];
@@ -372,6 +373,36 @@ const Dashboard: React.FC<DashboardProps> = ({
               </CardContent>
             </Card>
           </Stack>
+
+          {/* AI Chat Interface */}
+          <Card variant="outlined" sx={{ borderRadius: 4, overflow: 'hidden' }}>
+            <Box sx={{ height: 4, backgroundImage: 'linear-gradient(90deg, #9333ea, #4c60ff)' }} />
+            <CardContent sx={cardContentPadding}>
+              <Stack spacing={3}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <AutoAwesomeRoundedIcon sx={{ color: 'primary.main' }} />
+                    <Typography variant="h5" fontWeight={600}>
+                      AI Chat Assistant
+                    </Typography>
+                  </Stack>
+                  <Chip label="New" color="secondary" size="small" sx={{ borderRadius: '999px' }} />
+                </Stack>
+                <Typography variant="body2" color="text.secondary">
+                  Have a continuous conversation with your documents. Ask follow-up questions and get detailed explanations.
+                </Typography>
+                <Suspense
+                  fallback={(
+                    <Stack direction="row" justifyContent="center" py={4}>
+                      <CircularProgress size={28} />
+                    </Stack>
+                  )}
+                >
+                  <ChatInterface />
+                </Suspense>
+              </Stack>
+            </CardContent>
+          </Card>
         </Stack>
 
         <Stack spacing={4} flex={{ xl: 1 }}>

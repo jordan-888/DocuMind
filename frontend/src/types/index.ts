@@ -44,3 +44,23 @@ export interface SummarizeResponse {
   };
   processing_time: number;
 }
+
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  created_at?: string;
+}
+
+export interface ChatCitation {
+  document_id: string;
+  chunk_id: string;
+  text: string;
+  page_number?: number;
+  similarity_score: number;
+}
+
+export interface ChatResponse {
+  answer: string;
+  citations: ChatCitation[];
+  processing_time: number;
+}
