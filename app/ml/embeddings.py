@@ -5,12 +5,19 @@ import numpy as np
 
 class EmbeddingGenerator:
     def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self.model = AutoModel.from_pretrained(model_name)
+        self.model_name = model_name
+        self.tokenizer = None
+        self.model = None
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model.to(self.device)
+
+    def _load_model(self):
+        if self.model is None:
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+            self.model = AutoModel.from_pretrained(self.model_name)
+            self.model.to(self.device)
 
     def generate_embeddings(self, texts: List[str], batch_size: int = 32) -> List[np.ndarray]:
+        self._load_model()
         embeddings = []
         for i in range(0, len(texts), batch_size):
             batch = texts[i:i + batch_size]
