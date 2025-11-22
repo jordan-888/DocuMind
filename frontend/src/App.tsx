@@ -123,13 +123,13 @@ function App() {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      
+
       const response = await apiClient.post('/api/v1/documents/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      
+
       await loadDocuments();
       return response.data;
     } catch (error) {
@@ -146,12 +146,12 @@ function App() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(180deg, #eef2ff 0%, #f5f7ff 60%, #ffffff 100%)',
+          background: 'linear-gradient(135deg, #f5f7ff 0%, #fafbff 50%, #ffffff 100%)',
         }}
       >
-        <Stack spacing={2} alignItems="center">
-          <CircularProgress color="primary" />
-          <Typography variant="body2" color="text.secondary">
+        <Stack spacing={3} alignItems="center">
+          <CircularProgress size={48} thickness={4} sx={{ color: 'primary.main' }} />
+          <Typography variant="body1" color="text.secondary" fontWeight={500}>
             Loading DocuMind…
           </Typography>
         </Stack>
@@ -164,11 +164,11 @@ function App() {
       <Box
         sx={{
           minHeight: '100vh',
-          background: 'linear-gradient(180deg, #eef2ff 0%, #f8fbff 40%, #ffffff 100%)',
+          background: 'linear-gradient(135deg, #f5f7ff 0%, #fafbff 50%, #ffffff 100%)',
         }}
       >
         <Header user={user} />
-        <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 }, px: { xs: 3, md: 4 } }}>
+        <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 }, px: { xs: 2, md: 3 } }}>
           {!user ? (
             <Stack
               spacing={{ xs: 4, md: 6 }}
@@ -179,37 +179,38 @@ function App() {
               }}
             >
               <Stack alignItems="center" justifyContent="center" flexGrow={1}>
-                <Box width={{ xs: '100%', sm: '85%', md: '70%' }}>
+                <Box width={{ xs: '100%', sm: '90%', md: '75%', lg: '65%' }}>
                   <Auth />
                 </Box>
               </Stack>
               <Box
                 sx={{
                   position: 'absolute',
-                  bottom: 0,
-                  right: 0,
-                  background: 'rgba(255,255,255,0.82)',
+                  bottom: 16,
+                  right: 16,
+                  background: 'rgba(255,255,255,0.9)',
+                  backdropFilter: 'blur(10px)',
                   borderRadius: '999px',
-                  px: { xs: 2.5, md: 3.25 },
-                  py: { xs: 0.9, md: 1.05 },
-                  boxShadow: '0 16px 32px -24px rgba(76,96,255,0.55)',
-                  border: '1px solid rgba(76,96,255,0.18)',
+                  px: { xs: 2.5, md: 3 },
+                  py: { xs: 1, md: 1.2 },
+                  boxShadow: '0 4px 20px rgba(99,102,241,0.15)',
+                  border: '1px solid rgba(99,102,241,0.1)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  mr: { xs: 0, md: 2 },
-                }}
+                }
+                }
               >
                 <Typography
                   variant="subtitle2"
                   sx={{
                     fontWeight: 600,
                     fontStyle: 'italic',
-                    letterSpacing: 0.4,
+                    letterSpacing: 0.3,
                     fontFamily: "'Segoe Script', 'Apple Chancery', cursive",
                     textTransform: 'none',
                     color: 'text.primary',
-                    fontSize: { xs: '0.8rem', md: '0.85rem' },
+                    fontSize: { xs: '0.75rem', md: '0.8rem' },
                   }}
                 >
                   Created By -{' '}

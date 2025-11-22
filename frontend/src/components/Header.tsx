@@ -26,9 +26,10 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
       color="transparent"
       elevation={0}
       sx={{
-        backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid rgba(15, 23, 42, 0.08)',
-        backgroundColor: 'rgba(255,255,255,0.92)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(99, 102, 241, 0.08)',
+        backgroundColor: 'rgba(255,255,255,0.95)',
+        boxShadow: '0 1px 3px rgba(99, 102, 241, 0.05)',
       }}
     >
       <Toolbar sx={{ justifyContent: 'space-between', gap: 3 }}>
@@ -36,11 +37,11 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
           <Avatar
             variant="rounded"
             sx={{
-              borderRadius: '22px',
+              borderRadius: '12px',
               width: 48,
               height: 48,
-              bgcolor: 'primary.main',
-              boxShadow: 3,
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              boxShadow: '0 4px 12px rgba(99, 102, 241, 0.2)',
             }}
           >
             <PsychologyRoundedIcon fontSize="small" />

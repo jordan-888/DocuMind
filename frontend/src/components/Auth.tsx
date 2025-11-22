@@ -61,9 +61,9 @@ const Auth: React.FC = () => {
         px: { xs: 4, md: 6 },
         py: { xs: 5, md: 7 },
         borderRadius: 6,
-        boxShadow: '0 40px 120px -60px rgba(76, 96, 255, 0.35)',
-        bgcolor: 'rgba(255,255,255,0.9)',
-        border: '1px solid rgba(76, 96, 255, 0.12)',
+        boxShadow: '0 20px 60px -20px rgba(99, 102, 241, 0.3)',
+        bgcolor: 'rgba(255,255,255,0.95)',
+        border: '1px solid rgba(99, 102, 241, 0.1)',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -71,7 +71,7 @@ const Auth: React.FC = () => {
           width: 280,
           height: 280,
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, rgba(76,96,255,0.18), rgba(6,182,212,0.18))',
+          background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.15))',
           filter: 'blur(0px)',
         },
         '&::after': {
@@ -81,7 +81,7 @@ const Auth: React.FC = () => {
           width: 240,
           height: 240,
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, rgba(6,182,212,0.22), rgba(76,96,255,0.12))',
+          background: 'linear-gradient(135deg, rgba(139,92,246,0.18), rgba(99,102,241,0.1))',
           filter: 'blur(0px)',
         },
       }}
@@ -151,10 +151,11 @@ const Auth: React.FC = () => {
               borderRadius: '999px',
               py: 1.5,
               fontSize: 15,
-              backgroundImage: 'linear-gradient(135deg, #4c60ff 0%, #06b6d4 100%)',
-              boxShadow: '0 18px 45px -22px rgba(76, 96, 255, 0.65)',
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              boxShadow: '0 8px 24px -8px rgba(99, 102, 241, 0.4)',
               '&:hover': {
-                backgroundImage: 'linear-gradient(135deg, #3d4be0 0%, #0593b3 100%)',
+                background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                boxShadow: '0 12px 32px -8px rgba(99, 102, 241, 0.5)',
               },
             }}
           >
