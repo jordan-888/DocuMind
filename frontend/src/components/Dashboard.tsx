@@ -45,15 +45,15 @@ interface DashboardProps {
 
 const heroHighlights = [
   {
-    icon: <SecurityRoundedIcon fontSize="small" />, 
+    icon: <SecurityRoundedIcon fontSize="small" />,
     label: 'Enterprise-grade Supabase security',
   },
   {
-    icon: <LayersRoundedIcon fontSize="small" />, 
+    icon: <LayersRoundedIcon fontSize="small" />,
     label: 'Vector-native semantic retrieval',
   },
   {
-    icon: <AutoAwesomeRoundedIcon fontSize="small" />, 
+    icon: <AutoAwesomeRoundedIcon fontSize="small" />,
     label: 'Auto-generated RAG summaries',
   },
 ];
@@ -435,7 +435,57 @@ const Dashboard: React.FC<DashboardProps> = ({
           </Card>
         </Stack>
       </Stack>
-    </Stack>
+
+
+      {/* Footer */}
+      <Box
+        component="footer"
+        sx={{
+          py: 4,
+          mt: 'auto',
+          borderTop: '1px solid',
+          borderColor: 'divider',
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 2
+        }}
+      >
+        <Typography variant="caption" color="text.secondary">
+          © {new Date().getFullYear()} DocuMind. All rights reserved.
+        </Typography>
+
+        <Stack direction="row" spacing={3} alignItems="center">
+          <Typography variant="caption" color="text.secondary" sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' } }}>
+            Privacy Policy
+          </Typography>
+          <Typography variant="caption" color="text.secondary" sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' } }}>
+            Terms of Service
+          </Typography>
+          <Box
+            sx={{
+              background: 'rgba(99,102,241,0.05)',
+              borderRadius: '999px',
+              px: 2,
+              py: 0.5,
+              border: '1px solid rgba(99,102,241,0.1)',
+            }}
+          >
+            <Typography
+              variant="caption"
+              sx={{
+                fontWeight: 600,
+                fontFamily: "'Segoe Script', 'Apple Chancery', cursive",
+                color: 'text.primary',
+              }}
+            >
+              Created By <Typography component="span" sx={{ color: 'primary.main', fontWeight: 'inherit', fontFamily: 'inherit' }}>Dev Jadaun</Typography>
+            </Typography>
+          </Box>
+        </Stack>
+      </Box>
+    </Stack >
   );
 };
 

@@ -183,50 +183,7 @@ function App() {
                   <Auth />
                 </Box>
               </Stack>
-              <Box
-                sx={{
-                  position: 'absolute',
-                  bottom: 16,
-                  right: 16,
-                  background: 'rgba(255,255,255,0.9)',
-                  backdropFilter: 'blur(10px)',
-                  borderRadius: '999px',
-                  px: { xs: 2.5, md: 3 },
-                  py: { xs: 1, md: 1.2 },
-                  boxShadow: '0 4px 20px rgba(99,102,241,0.15)',
-                  border: '1px solid rgba(99,102,241,0.1)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }
-                }
-              >
-                <Typography
-                  variant="subtitle2"
-                  sx={{
-                    fontWeight: 600,
-                    fontStyle: 'italic',
-                    letterSpacing: 0.3,
-                    fontFamily: "'Segoe Script', 'Apple Chancery', cursive",
-                    textTransform: 'none',
-                    color: 'text.primary',
-                    fontSize: { xs: '0.75rem', md: '0.8rem' },
-                  }}
-                >
-                  Created By -{' '}
-                  <Typography
-                    component="span"
-                    sx={{
-                      color: 'primary.main',
-                      fontFamily: "'Segoe Script', 'Apple Chancery', cursive",
-                      fontStyle: 'inherit',
-                      fontWeight: 'inherit',
-                    }}
-                  >
-                    Dev Jadaun
-                  </Typography>
-                </Typography>
-              </Box>
+
             </Stack>
           ) : (
             <Routes>
@@ -246,8 +203,8 @@ function App() {
             </Routes>
           )}
         </Container>
-      </Box>
-    </Router>
+      </Box >
+    </Router >
   );
 }
 
