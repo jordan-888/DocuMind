@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import List
+from typing import List, Any
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, BackgroundTasks, status
 from sqlalchemy.orm import Session
@@ -32,10 +32,15 @@ import fitz
 router = APIRouter()
 embedding_generator = EmbeddingGenerator()
 
-def get_user_id(user: SupabaseUser) -> str:
+def get_user_id(user: Any) -> str:
     """Safely get user ID from either a Supabase object or a test dictionary."""
     if isinstance(user, dict):
         return user.get("id")
+    
+    # Handle UserResponse object from newer Supabase client
+    if hasattr(user, "user") and user.user:
+        return str(user.user.id)
+        
     return str(user.id)
 
 @router.post("/upload", response_model=Document)
