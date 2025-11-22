@@ -56,20 +56,20 @@ class AuthService:
                     message="Authentication service unavailable",
                     error_code="SERVICE_UNAVAILABLE"
                 )
-            user = supabase_client.auth.get_user(credentials.credentials)
-            if not user:
+            user_response = supabase_client.auth.get_user(credentials.credentials)
+            if not user_response or not user_response.user:
                 raise AuthError(
                     status_code=status.HTTP_401_UNAUTHORIZED,
-                    message="User not found",
+                    message="User not found or token invalid",
                     error_code="USER_NOT_FOUND"
                 )
-            return user
+            return user_response
         except Exception as e:
+            logger.error(f"Auth error: {str(e)}")
             raise AuthError(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                message="Invalid authentication credentials",
-                error_code="INVALID_CREDENTIALS",
-                error=str(e)
+                message="Could not validate credentials",
+                error_code="AUTH_ERROR"
             )
 
     async def verify_document_access(
