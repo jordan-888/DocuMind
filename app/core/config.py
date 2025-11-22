@@ -59,7 +59,19 @@ class Settings(BaseSettings):
     RATE_LIMIT_WINDOW: int = 60  # window in seconds
     
     # CORS
-    CORS_ORIGINS: List[str] = ["http://localhost:3000"]
+    CORS_ORIGINS: List[str] = ["http://localhost:5173"]
+    
+    @field_validator("CORS_ORIGINS", mode="before")
+    def parse_cors_origins(cls, v):
+        """Parse CORS_ORIGINS from JSON string if needed"""
+        if isinstance(v, str):
+            import json
+            try:
+                return json.loads(v)
+            except json.JSONDecodeError:
+                # If it's a single URL string, wrap it in a list
+                return [v]
+        return v
     
     # File Storage
     UPLOAD_DIR: str = "./data/uploads"
