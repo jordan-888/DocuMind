@@ -1,33 +1,4 @@
 import { createTheme } from '@mui/material/styles';
-import type { Shadows } from '@mui/material/styles';
-
-const customShadows: Shadows = [
-  'none',
-  '0 10px 30px rgba(76, 96, 255, 0.08)',
-  '0 14px 45px rgba(15, 23, 42, 0.07)',
-  '0 16px 60px rgba(15, 23, 42, 0.08)',
-  '0 20px 65px rgba(76, 96, 255, 0.08)',
-  '0 24px 70px rgba(76, 96, 255, 0.09)',
-  '0 28px 75px rgba(15, 23, 42, 0.1)',
-  '0 32px 80px rgba(15, 23, 42, 0.12)',
-  '0 36px 85px rgba(15, 23, 42, 0.14)',
-  '0 40px 90px rgba(76, 96, 255, 0.14)',
-  '0 42px 95px rgba(15, 23, 42, 0.15)',
-  '0 44px 100px rgba(15, 23, 42, 0.16)',
-  '0 46px 105px rgba(76, 96, 255, 0.16)',
-  '0 48px 110px rgba(15, 23, 42, 0.17)',
-  '0 50px 115px rgba(15, 23, 42, 0.18)',
-  '0 52px 120px rgba(76, 96, 255, 0.18)',
-  '0 54px 125px rgba(15, 23, 42, 0.19)',
-  '0 56px 130px rgba(15, 23, 42, 0.2)',
-  '0 58px 135px rgba(76, 96, 255, 0.2)',
-  '0 60px 140px rgba(15, 23, 42, 0.21)',
-  '0 62px 145px rgba(15, 23, 42, 0.22)',
-  '0 64px 150px rgba(76, 96, 255, 0.22)',
-  '0 66px 155px rgba(15, 23, 42, 0.23)',
-  '0 68px 160px rgba(15, 23, 42, 0.24)',
-  '0 70px 165px rgba(15, 23, 42, 0.25)',
-];
 
 // Modern DocuMind Theme - Inspired by contemporary SaaS applications
 const theme = createTheme({
