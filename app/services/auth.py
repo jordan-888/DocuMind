@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Dict, Any
+import logging
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -8,6 +9,8 @@ from supabase import create_client, Client
 
 from app.core.config import settings
 from app.models.schemas import ErrorDetail
+
+logger = logging.getLogger(__name__)
 
 # These can stay at the module level
 security = HTTPBearer()
@@ -57,15 +60,38 @@ class AuthService:
                     error_code="SERVICE_UNAVAILABLE"
                 )
             user_response = supabase_client.auth.get_user(credentials.credentials)
-            if not user_response or not user_response.user:
+            logger.info(f"Got user_response: {type(user_response)}")
+            
+            if not user_response:
+                logger.error("user_response is None")
                 raise AuthError(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     message="User not found or token invalid",
                     error_code="USER_NOT_FOUND"
                 )
+            
+            if not hasattr(user_response, 'user'):
+                logger.error(f"user_response has no 'user' attribute. Type: {type(user_response)}, Dir: {dir(user_response)}")
+                raise AuthError(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    message="Invalid user response structure",
+                    error_code="INVALID_USER_RESPONSE"
+                )
+            
+            if not user_response.user:
+                logger.error("user_response.user is None")
+                raise AuthError(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    message="User not found in response",
+                    error_code="USER_NOT_FOUND"
+                )
+            
+            logger.info(f"Successfully got user: {user_response.user.id}")
             return user_response
+        except AuthError:
+            raise
         except Exception as e:
-            logger.error(f"Auth error: {str(e)}")
+            logger.error(f"Auth error: {str(e)}", exc_info=True)
             raise AuthError(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 message="Could not validate credentials",
