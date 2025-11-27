@@ -46,6 +46,12 @@ function App() {
   const [summary, setSummary] = useState<SummarizeResponse | null>(null);
 
   useEffect(() => {
+    // Failsafe: Force loading to stop after 10 seconds no matter what
+    const loadingTimeout = setTimeout(() => {
+      console.warn('Loading timeout reached, forcing loading to stop');
+      setLoading(false);
+    }, 10000);
+
     // Check for existing session
     const checkSession = async () => {
       try {
@@ -67,6 +73,7 @@ function App() {
         console.error('Error checking session:', error);
       } finally {
         // Always set loading to false, even if there's an error
+        clearTimeout(loadingTimeout);
         setLoading(false);
       }
     };
@@ -96,7 +103,10 @@ function App() {
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(loadingTimeout);
+    };
   }, []);
 
   const loadDocuments = async () => {
