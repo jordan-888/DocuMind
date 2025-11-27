@@ -95,24 +95,33 @@ async def chat_with_documents(
         # 7. Construct Answer (Retrieval-based)
         # In a full implementation, this text would be fed to an LLM (OpenAI/Anthropic)
         # to generate a natural language response.
-        # For now, we present the most relevant excerpts.
+        # For now, we present the most relevant excerpts in a conversational format.
         
-        intro = "Based on your documents, here is the relevant information:\n\n"
+        # Create a more conversational response
+        intro = f"Based on your documents, I found {len(top_results)} relevant passage{'s' if len(top_results) > 1 else ''} that answer your question:\n\n"
         excerpts = []
         citations = []
         
-        for score, chunk, doc in top_results:
-            excerpts.append(f"- {chunk.text.strip()}")
+        for idx, (score, chunk, doc) in enumerate(top_results, 1):
+            # Format each excerpt with numbering
+            excerpt_text = chunk.text.strip()
+            excerpts.append(f"{idx}. {excerpt_text}")
             
             citations.append(ChatCitation(
                 document_id=doc.id,
                 chunk_id=chunk.id,
-                text=chunk.text[:200] + "...",
-                page_number=chunk.meta_info.get("page_number"),
+                text=chunk.text[:300] + ("..." if len(chunk.text) > 300 else ""),
+                page_number=chunk.meta_info.get("page_number") if chunk.meta_info else None,
                 similarity_score=float(score)
             ))
-            
+        
+        # Combine into a natural answer
         answer = intro + "\n\n".join(excerpts)
+        
+        # Add a helpful closing
+        if len(top_results) > 1:
+            answer += "\n\nThese passages are ordered by relevance. You can view the source citations below for more context."
+        
         
         return ChatResponse(
             answer=answer,

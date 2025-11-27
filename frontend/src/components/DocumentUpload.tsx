@@ -56,11 +56,11 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ onUpload }) => {
       }, 200);
 
       await onUpload(file);
-      
+
       clearInterval(progressInterval);
       setProgress(100);
       setMessage('File uploaded successfully!');
-      
+
       // Reset after 3 seconds
       setTimeout(() => {
         setProgress(0);
@@ -69,9 +69,19 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ onUpload }) => {
           fileInputRef.current.value = '';
         }
       }, 3000);
-      
+
     } catch (error: any) {
-      setMessage(`Upload failed: ${error.message}`);
+      console.error('Upload error:', error);
+      let errorMessage = 'Upload failed';
+
+      if (error.response?.data?.detail) {
+        // Backend returned a detailed error message
+        errorMessage = `Upload failed: ${error.response.data.detail}`;
+      } else if (error.message) {
+        errorMessage = `Upload failed: ${error.message}`;
+      }
+
+      setMessage(errorMessage);
       setProgress(0);
     } finally {
       setUploading(false);

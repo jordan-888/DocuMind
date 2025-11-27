@@ -23,23 +23,19 @@ import CodeRoundedIcon from '@mui/icons-material/CodeRounded';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import LayersRoundedIcon from '@mui/icons-material/LayersRounded';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
-import PsychologyRoundedIcon from '@mui/icons-material/PsychologyRounded';
 import SecurityRoundedIcon from '@mui/icons-material/SecurityRounded';
 import TimelineRoundedIcon from '@mui/icons-material/TimelineRounded';
 import TrendingUpRoundedIcon from '@mui/icons-material/TrendingUpRounded';
-import type { Document, SearchResponse, SummarizeResponse } from '../types';
+import type { Document, SummarizeResponse } from '../types';
 
 const DocumentUpload = lazy(() => import('./DocumentUpload'));
-const SearchInterface = lazy(() => import('./SearchInterface'));
 const SummarizeInterface = lazy(() => import('./SummarizeInterface'));
 const DocumentsList = lazy(() => import('./DocumentsList'));
 const ChatInterface = lazy(() => import('./ChatInterface'));
 
 interface DashboardProps {
   documents: Document[];
-  searchResults: SearchResponse | null;
   summary: SummarizeResponse | null;
-  onSearch: (query: string) => void;
   onSummarize: (query: string) => void;
   onUpload: (file: File) => Promise<any>;
 }
@@ -87,9 +83,7 @@ const workflowHighlights = [
 
 const Dashboard: React.FC<DashboardProps> = ({
   documents,
-  searchResults,
   summary,
-  onSearch,
   onSummarize,
   onUpload,
 }) => {
@@ -249,10 +243,10 @@ const Dashboard: React.FC<DashboardProps> = ({
                     </Paper>
                     <Paper variant="outlined" sx={{ borderRadius: 3, p: 2 }}>
                       <Typography variant="subtitle1" fontWeight={600} color="text.primary">
-                        {searchResults ? searchResults.total_results : '∞'}
+                        {summary ? '✓' : '—'}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        Results surfaced
+                        AI Summary ready
                       </Typography>
                     </Paper>
                   </Box>
@@ -321,58 +315,32 @@ const Dashboard: React.FC<DashboardProps> = ({
             </CardContent>
           </Card>
 
-          <Stack direction={{ xs: 'column', md: 'row' }} spacing={4} alignItems="stretch">
-            <Card variant="outlined" sx={{ borderRadius: 4, overflow: 'hidden', flex: 1 }}>
-              <Box sx={{ height: 4, backgroundImage: 'linear-gradient(90deg, #4c60ff, #312e81)' }} />
-              <CardContent sx={cardContentPadding}>
-                <Stack spacing={3}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography variant="h5" fontWeight={600}>
-                      Semantic search
-                    </Typography>
-                    <Chip icon={<PsychologyRoundedIcon />} label="Vector search" variant="outlined" sx={{ borderRadius: '999px' }} />
-                  </Stack>
-                  <Typography variant="body2" color="text.secondary">
-                    Ask natural-language questions across your knowledge base.
+          {/* AI Summarization - Full Width */}
+          <Card variant="outlined" sx={{ borderRadius: 4, overflow: 'hidden' }}>
+            <Box sx={{ height: 4, backgroundImage: 'linear-gradient(90deg, #06b6d4, #4c60ff)' }} />
+            <CardContent sx={cardContentPadding}>
+              <Stack spacing={3}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <Typography variant="h5" fontWeight={600}>
+                    AI Summarization
                   </Typography>
-                  <Suspense
-                    fallback={(
-                      <Stack direction="row" justifyContent="center" py={4}>
-                        <CircularProgress size={28} />
-                      </Stack>
-                    )}
-                  >
-                    <SearchInterface onSearch={onSearch} results={searchResults} />
-                  </Suspense>
+                  <Chip icon={<TimelineRoundedIcon />} label="Powered by Transformers" variant="outlined" sx={{ borderRadius: '999px' }} />
                 </Stack>
-              </CardContent>
-            </Card>
-            <Card variant="outlined" sx={{ borderRadius: 4, overflow: 'hidden', flex: 1 }}>
-              <Box sx={{ height: 4, backgroundImage: 'linear-gradient(90deg, #06b6d4, #4c60ff)' }} />
-              <CardContent sx={cardContentPadding}>
-                <Stack spacing={3}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography variant="h5" fontWeight={600}>
-                      AI summarization
-                    </Typography>
-                    <Chip icon={<TimelineRoundedIcon />} label="Powered by Transformers" variant="outlined" sx={{ borderRadius: '999px' }} />
-                  </Stack>
-                  <Typography variant="body2" color="text.secondary">
-                    Synthesize dense content into crisp, shareable narratives.
-                  </Typography>
-                  <Suspense
-                    fallback={(
-                      <Stack direction="row" justifyContent="center" py={4}>
-                        <CircularProgress size={28} />
-                      </Stack>
-                    )}
-                  >
-                    <SummarizeInterface onSummarize={onSummarize} summary={summary} />
-                  </Suspense>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Stack>
+                <Typography variant="body2" color="text.secondary">
+                  Synthesize dense content into crisp, shareable narratives. Ask questions about your documents and get intelligent summaries.
+                </Typography>
+                <Suspense
+                  fallback={(
+                    <Stack direction="row" justifyContent="center" py={4}>
+                      <CircularProgress size={28} />
+                    </Stack>
+                  )}
+                >
+                  <SummarizeInterface onSummarize={onSummarize} summary={summary} />
+                </Suspense>
+              </Stack>
+            </CardContent>
+          </Card>
 
           {/* AI Chat Interface */}
           <Card variant="outlined" sx={{ borderRadius: 4, overflow: 'hidden' }}>

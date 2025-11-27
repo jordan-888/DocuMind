@@ -72,6 +72,10 @@ async def upload_document(
         )
 
     try:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"Starting document upload for user: {user_id}, filename: {file.filename}")
+        
         try:
             with fitz.open(stream=file_content, filetype="pdf") as doc:
                 if not doc.page_count:
@@ -81,16 +85,29 @@ async def upload_document(
                     "title": doc.metadata.get("title", ""),
                     "author": doc.metadata.get("author", ""),
                 }
-        except Exception:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid or corrupted PDF file")
+                logger.info(f"PDF validated: {doc.page_count} pages")
+        except Exception as e:
+            logger.error(f"PDF validation failed: {str(e)}")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Invalid or corrupted PDF file: {str(e)}")
 
         safe_filename = Path(file.filename).name or f"document-{file_id}.pdf"
         storage_key = f"{user_id}/{file_id}/{safe_filename}"
-        storage_result = save_document_bytes(
-            file_content,
-            storage_key,
-            content_type=file.content_type or "application/pdf",
-        )
+        
+        logger.info(f"Attempting to save file with storage_key: {storage_key}")
+        
+        try:
+            storage_result = save_document_bytes(
+                file_content,
+                storage_key,
+                content_type=file.content_type or "application/pdf",
+            )
+            logger.info(f"File saved successfully: {storage_result}")
+        except Exception as e:
+            logger.error(f"Storage save failed: {str(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Failed to save file: {str(e)}"
+            )
 
         db_document = DBDocument(
             id=file_id,
@@ -108,13 +125,18 @@ async def upload_document(
                 **pdf_metadata,
             }
         )
+        
+        logger.info(f"Creating database record for document: {file_id}")
         db.add(db_document)
         db.commit()
         db.refresh(db_document)
+        logger.info(f"Database record created successfully")
 
         try:
             enqueue_document_processing(str(db_document.id))
+            logger.info(f"Document queued for processing: {db_document.id}")
         except QueueUnavailableError:
+            logger.warning(f"Queue unavailable, using background task for: {db_document.id}")
             background_tasks.add_task(process_document_task, str(db_document.id))
 
         return Document.from_orm(db_document)
@@ -123,6 +145,9 @@ async def upload_document(
         db.rollback()
         raise e
     except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Unexpected error in upload_document: {str(e)}", exc_info=True)
         db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"An unexpected error occurred: {str(e)}")
 

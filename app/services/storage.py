@@ -46,33 +46,62 @@ def save_document_bytes(
     bucket: str = DEFAULT_BUCKET,
 ) -> dict:
     """Persist document bytes to Supabase storage when available, otherwise fallback to local disk."""
-    supabase_client = get_supabase_client()
-    use_supabase = settings.STORAGE_PROVIDER.lower() == "supabase" and supabase_client is not None
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    try:
+        supabase_client = get_supabase_client()
+        use_supabase = settings.STORAGE_PROVIDER.lower() == "supabase" and supabase_client is not None
+        
+        logger.info(f"Saving document with key: {storage_key}, provider: {settings.STORAGE_PROVIDER}, use_supabase: {use_supabase}")
 
-    if use_supabase:
-        buffer = BytesIO(file_bytes)
-        file_options = {"upsert": True}
-        if content_type:
-            file_options["content-type"] = content_type
+        if use_supabase:
+            try:
+                buffer = BytesIO(file_bytes)
+                file_options = {"upsert": True}
+                if content_type:
+                    file_options["content-type"] = content_type
 
-        supabase_client.storage.from_(bucket).upload(storage_key, buffer, file_options=file_options)
-        public_url = supabase_client.storage.from_(bucket).get_public_url(storage_key)
-        return {
-            "provider": "supabase",
-            "path": build_supabase_path(bucket, storage_key),
-            "public_url": public_url,
-        }
+                logger.info(f"Uploading to Supabase bucket: {bucket}, key: {storage_key}")
+                supabase_client.storage.from_(bucket).upload(storage_key, buffer, file_options=file_options)
+                public_url = supabase_client.storage.from_(bucket).get_public_url(storage_key)
+                logger.info(f"Successfully uploaded to Supabase: {public_url}")
+                
+                return {
+                    "provider": "supabase",
+                    "path": build_supabase_path(bucket, storage_key),
+                    "public_url": public_url,
+                }
+            except Exception as e:
+                logger.error(f"Supabase upload failed: {str(e)}, falling back to local storage")
+                # Fall through to local storage on Supabase error
+                use_supabase = False
 
-    # Local fallback for development/testing
-    target_path = Path(settings.UPLOAD_DIR) / storage_key
-    target_path.parent.mkdir(parents=True, exist_ok=True)
-    target_path.write_bytes(file_bytes)
+        # Local fallback for development/testing
+        if not use_supabase:
+            try:
+                target_path = Path(settings.UPLOAD_DIR) / storage_key
+                logger.info(f"Saving to local path: {target_path}")
+                
+                # Ensure parent directory exists
+                target_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                # Write file
+                target_path.write_bytes(file_bytes)
+                logger.info(f"Successfully saved to local storage: {target_path}")
 
-    return {
-        "provider": "local",
-        "path": str(target_path),
-        "public_url": None,
-    }
+                return {
+                    "provider": "local",
+                    "path": str(target_path),
+                    "public_url": None,
+                }
+            except Exception as e:
+                logger.error(f"Local storage save failed: {str(e)}")
+                raise Exception(f"Failed to save file to local storage: {str(e)}")
+                
+    except Exception as e:
+        logger.error(f"Unexpected error in save_document_bytes: {str(e)}")
+        raise Exception(f"Storage operation failed: {str(e)}")
 
 
 def download_supabase_file(storage_path: str) -> Optional[bytes]:

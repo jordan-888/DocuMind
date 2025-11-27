@@ -49,6 +49,8 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   created_at?: string;
+  citations?: ChatCitation[];
+  processing_time?: number;
 }
 
 export interface ChatCitation {

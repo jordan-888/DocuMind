@@ -64,12 +64,17 @@ const SummarizeInterface: React.FC<SummarizeInterfaceProps> = ({ onSummarize, su
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               autoComplete="off"
+              multiline
+              minRows={3}
+              maxRows={6}
               InputProps={{
-                startAdornment: <AutoAwesomeRoundedIcon color="success" sx={{ mr: 1 }} />,
+                startAdornment: <AutoAwesomeRoundedIcon color="success" sx={{ mr: 1, alignSelf: 'flex-start', mt: 1.5 }} />,
                 sx: {
                   borderRadius: 4,
                   backgroundColor: 'rgba(255,255,255,0.95)',
                   boxShadow: 'inset 0 0 0 1px rgba(16,185,129,0.12)',
+                  alignItems: 'flex-start',
+                  py: 1.5
                 },
               }}
             />
