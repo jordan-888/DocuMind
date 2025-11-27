@@ -17,7 +17,7 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 
 interface DocumentUploadProps {
-  onUpload: (file: File) => Promise<any>;
+  onUpload: (file: File, onProgress?: (progress: number) => void) => Promise<any>;
 }
 
 const DocumentUpload: React.FC<DocumentUploadProps> = ({ onUpload }) => {
@@ -44,20 +44,11 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ onUpload }) => {
     setMessage('');
 
     try {
-      // Simulate progress
-      const progressInterval = setInterval(() => {
-        setProgress(prev => {
-          if (prev >= 90) {
-            clearInterval(progressInterval);
-            return prev;
-          }
-          return prev + 10;
-        });
-      }, 200);
+      // Use real upload progress from backend
+      await onUpload(file, (progressPercent) => {
+        setProgress(progressPercent);
+      });
 
-      await onUpload(file);
-
-      clearInterval(progressInterval);
       setProgress(100);
       setMessage('File uploaded successfully!');
 

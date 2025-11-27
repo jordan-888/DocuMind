@@ -59,7 +59,7 @@ class Settings(BaseSettings):
     RATE_LIMIT_WINDOW: int = 60  # window in seconds
     
     # CORS
-    CORS_ORIGINS: List[str] = ["http://localhost:5173"]
+    CORS_ORIGINS: List[str] = ["http://localhost:5173", "https://ai-documind.vercel.app"]
     
     @field_validator("CORS_ORIGINS", mode="before")
     def parse_cors_origins(cls, v):
