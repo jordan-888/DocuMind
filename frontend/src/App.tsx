@@ -57,11 +57,18 @@ function App() {
             id: session.user.id,
             email: session.user.email || '',
           });
-          await loadDocuments();
+          // Load documents with error handling to prevent infinite loading
+          try {
+            await loadDocuments();
+          } catch (docError) {
+            console.error('Error loading documents:', docError);
+            // Don't block the app if documents fail to load
+          }
         }
       } catch (error) {
         console.error('Error checking session:', error);
       } finally {
+        // Always set loading to false, even if there's an error
         setLoading(false);
       }
     };
@@ -76,7 +83,12 @@ function App() {
             id: session.user.id,
             email: session.user.email || '',
           });
-          await loadDocuments();
+          // Load documents with error handling
+          try {
+            await loadDocuments();
+          } catch (docError) {
+            console.error('Error loading documents on auth change:', docError);
+          }
         } else {
           setUser(null);
           setDocuments([]);
