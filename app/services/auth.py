@@ -59,7 +59,16 @@ class AuthService:
                     message="Authentication service unavailable",
                     error_code="SERVICE_UNAVAILABLE"
                 )
-            user_response = supabase_client.auth.get_user(credentials.credentials)
+            
+            # Extract token and strip 'Bearer ' prefix if present
+            token = credentials.credentials
+            if token.startswith('Bearer '):
+                token = token[7:]  # Remove 'Bearer ' prefix
+            
+            logger.info(f"Validating token (length: {len(token)})")
+            
+            # Validate token with Supabase
+            user_response = supabase_client.auth.get_user(token)
             logger.info(f"Got user_response: {type(user_response)}")
             
             if not user_response:
@@ -86,7 +95,7 @@ class AuthService:
                     error_code="USER_NOT_FOUND"
                 )
             
-            logger.info(f"Successfully got user: {user_response.user.id}")
+            logger.info(f"Successfully authenticated user: {user_response.user.id}")
             return user_response
         except AuthError:
             raise
@@ -94,7 +103,7 @@ class AuthService:
             logger.error(f"Auth error: {str(e)}", exc_info=True)
             raise AuthError(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                message="Could not validate credentials",
+                message=f"Could not validate credentials: {str(e)}",
                 error_code="AUTH_ERROR"
             )
 

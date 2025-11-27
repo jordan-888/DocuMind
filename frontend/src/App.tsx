@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Container, Stack, Typography, CircularProgress } from '@mui/material';
-import type { User, Document, SearchResponse, SummarizeResponse } from './types';
+import type { User, Document, SummarizeResponse } from './types';
 import Header from './components/Header';
 import Auth from './components/Auth';
 import Dashboard from './components/Dashboard';
@@ -22,11 +22,19 @@ const apiClient = axios.create({
 });
 
 // Add auth interceptor
-apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('auth_token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+apiClient.interceptors.request.use(async (config) => {
+  try {
+    // Get the current session from Supabase
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  } catch (error) {
+    console.error('Error getting session for API request:', error);
   }
+
   return config;
 });
 
@@ -34,7 +42,6 @@ function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [documents, setDocuments] = useState<Document[]>([]);
-  const [searchResults, setSearchResults] = useState<SearchResponse | null>(null);
   const [summary, setSummary] = useState<SummarizeResponse | null>(null);
 
   useEffect(() => {
@@ -47,9 +54,6 @@ function App() {
             id: session.user.id,
             email: session.user.email || '',
           });
-          if (session.access_token) {
-            localStorage.setItem('auth_token', session.access_token);
-          }
           await loadDocuments();
         }
       } catch (error) {
@@ -69,15 +73,10 @@ function App() {
             id: session.user.id,
             email: session.user.email || '',
           });
-          if (session.access_token) {
-            localStorage.setItem('auth_token', session.access_token);
-          }
           await loadDocuments();
         } else {
           setUser(null);
           setDocuments([]);
-          localStorage.removeItem('auth_token');
-          setSearchResults(null);
           setSummary(null);
         }
         setLoading(false);
@@ -96,14 +95,7 @@ function App() {
     }
   };
 
-  const handleSearch = async (query: string) => {
-    try {
-      const response = await apiClient.post('/api/v1/documents/search', { query });
-      setSearchResults(response.data);
-    } catch (error) {
-      console.error('Search failed:', error);
-    }
-  };
+
 
   const handleSummarize = async (query: string) => {
     try {
@@ -192,9 +184,7 @@ function App() {
                 element={
                   <Dashboard
                     documents={documents}
-                    searchResults={searchResults}
                     summary={summary}
-                    onSearch={handleSearch}
                     onSummarize={handleSummarize}
                     onUpload={handleDocumentUpload}
                   />

@@ -11,12 +11,13 @@ import time
 description = """
 # DocuMind API
 
-DocuMind is an intelligent document processing and semantic search system.
+DocuMind is an intelligent document processing and AI-powered knowledge system.
 
 ## Features
 
 * 📄 Document Upload and Processing
-* 🔍 Semantic Search
+* 🤖 AI Chat Assistant
+* 📝 AI Summarization
 * 👥 User Management
 * 🔒 Authentication
 
@@ -103,6 +104,14 @@ app.include_router(
     chat.router,
     prefix="/api/v1/chat",
     tags=["chat"]
+)
+
+# Debug router (remove in production)
+from app.api.routers import debug
+app.include_router(
+    debug.router,
+    prefix="/api/debug",
+    tags=["debug"]
 )
 
 @app.get(
