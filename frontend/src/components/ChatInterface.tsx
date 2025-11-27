@@ -42,7 +42,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ documentIds }) => {
     };
 
     useEffect(() => {
-        scrollToBottom();
+        // Only scroll if there are messages to avoid auto-scroll on login
+        if (messages.length > 0) {
+            scrollToBottom();
+        }
     }, [messages]);
 
     const toggleCitations = (index: number) => {
