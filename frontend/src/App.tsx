@@ -21,25 +21,23 @@ const apiClient = axios.create({
   },
 });
 
-// Add auth interceptor
-apiClient.interceptors.request.use(async (config) => {
-  try {
-    // Get the current session from Supabase
-    const { data: { session } } = await supabase.auth.getSession();
-    const token = session?.access_token;
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    } else {
-      // If no token, reject the request to prevent 401/500 errors
-      console.warn('No auth token available, request will be rejected');
+// Add auth interceptor - simplified to avoid async issues
+apiClient.interceptors.request.use(
+  async (config) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        config.headers.Authorization = `Bearer ${session.access_token}`;
+      }
+    } catch (error) {
+      console.error('Error getting session for API request:', error);
     }
-  } catch (error) {
-    console.error('Error getting session for API request:', error);
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-
-  return config;
-});
+);
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
