@@ -13,9 +13,10 @@ import supabase from './lib/supabaseClient';
 // API configuration
 const API_BASE_URL = config.api.baseUrl;
 
-// Create axios instance
+// Create axios instance with timeout
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 60000, // 60 second timeout for uploads
   headers: {
     'Content-Type': 'application/json',
   },
