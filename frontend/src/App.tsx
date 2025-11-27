@@ -30,6 +30,9 @@ apiClient.interceptors.request.use(async (config) => {
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      // If no token, reject the request to prevent 401/500 errors
+      console.warn('No auth token available, request will be rejected');
     }
   } catch (error) {
     console.error('Error getting session for API request:', error);
