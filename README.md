@@ -1,430 +1,378 @@
 # 🧠 DocuMind - AI Document Intelligence Platform
 
-**A complete, production-ready AI-powered document processing and semantic search system built with FastAPI, React, and modern ML technologies.**
+**A production-ready AI-powered document processing platform with semantic search, AI chat, and intelligent summarization.**
+
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-19-blue.svg)](https://reactjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org)
+[![Material UI](https://img.shields.io/badge/Material%20UI-7-blue.svg)](https://mui.com)
 
 ---
 
-## 🎯 **Project Overview**
+## 🎯 Overview
 
-DocuMind is an intelligent document processing platform that enables users to:
-- **Upload & Process**: PDF documents with automatic text extraction and chunking
-- **Semantic Search**: Find relevant content using natural language queries
-- **AI Summarization**: Generate intelligent summaries using RAG (Retrieval-Augmented Generation)
-- **User Management**: Secure authentication and document ownership
+DocuMind enables users to:
+- 📄 **Upload & Process** PDF documents with automatic text extraction
+- 🤖 **AI Chat Assistant** - Conversational interface to query documents with citations
+- 📊 **AI Summarization** - RAG-powered intelligent document summarization  
+- 🔐 **Secure Authentication** - Supabase-powered user management
 
 ---
 
-## 🚀 **Quick Start**
+## 🚀 Quick Start
 
-### **Prerequisites**
+### Prerequisites
 - Python 3.11+
-- Node.js 20.19+ (for frontend)
-- PostgreSQL with pgvector extension
-- Redis (optional, for background processing)
+- Node.js 20.19+
+- PostgreSQL with pgvector extension (for production)
+- Supabase account (for authentication)
 
-### **1. Environment Setup**
+### 1. Backend Setup
+
 ```bash
-# Clone and navigate to project
+# Navigate to project
 cd DocuMind\ Project
 
 # Activate virtual environment
 source .venv/bin/activate
 
-# Install dependencies (if not already done)
+# Install dependencies
 pip install -r requirements.txt
-pip install -r requirements-dev.txt
+
+# Set environment variables (see .env.example)
+cp .env.example .env
+# Edit .env with your credentials
+
+# Start backend
+uvicorn app.main:app --reload --port 8000
 ```
 
-### **2. Database Setup**
-```bash
-# Create PostgreSQL database with pgvector
-createdb documind
-psql documind -c "CREATE EXTENSION IF NOT EXISTS vector;"
+### 2. Frontend Setup
 
-# Set environment variables
-export SECRET_KEY=your-secret-key
-export DATABASE_URL=postgresql://Dev@localhost:5432/documind
-export SUPABASE_URL=http://localhost
-export SUPABASE_KEY=test
-export SUPABASE_JWT_SECRET=test
-```
-
-### **3. Start the Backend**
-```bash
-# Option 1: Using the script
-chmod +x scripts/run_backend.sh
-./scripts/run_backend.sh
-
-# Option 2: Direct command
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-The `scripts/run_backend.sh` helper activates `.venv`, applies safe local defaults (`DATABASE_URL=postgresql://Dev@localhost:5432/documind`, `CORS_ORIGINS=["http://localhost:5173"]`, Supabase dev keys), and launches Uvicorn. To override values, export variables in your shell before running the script (for example, `export CORS_ORIGINS='["https://your-frontend"]'`).
-
-### **4. Start the Frontend**
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### **5. Access the Application**
+### 3. Access Application
 - **Frontend**: http://localhost:5173
 - **Backend API**: http://localhost:8000
-- **API Documentation**: http://localhost:8000/docs
-- **Health Check**: http://localhost:8000/health
-
-### **6. Optional: Start Background Worker**
-```bash
-# Start Redis (if not running)
-redis-server
-
-# Start RQ worker
-./scripts/run_worker.sh
-```
+- **API Docs**: http://localhost:8000/docs
 
 ---
 
-## 🏗️ **Architecture**
+## 🏗️ Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   React Frontend│    │  FastAPI Backend│    │   PostgreSQL    │
-│   (Port 5173)   │◄──►│   (Port 8000)   │◄──►│   + pgvector   │
+│   (Vercel)      │◄──►│   (Render)      │◄──►│   (Supabase)   │
 │                 │    │                 │    │                 │
-│ • Authentication│    │ • REST API      │    │ • Document Store│
-│ • Document UI   │    │ • AI Processing │    │ • Vector Store │
-│ • Search UI     │    │ • Background Jobs│    │ • User Data    │
-│ • Summarization │    │ • Authentication│    │                 │
+│ • Material UI   │    │ • REST API      │    │ • Document Store│
+│ • Supabase Auth │    │ • JWT Auth      │    │ • Vector Store │
+│ • Axios Client  │    │ • ML Processing │    │ • User Data    │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
 ---
 
-## 🛠️ **Tech Stack**
+## 🛠️ Tech Stack
 
-### **Backend**
-- **Framework**: FastAPI (Python)
-- **Database**: PostgreSQL + pgvector
-- **Authentication**: Supabase Auth
+### Backend
+- **Framework**: FastAPI (Python 3.11)
+- **Database**: PostgreSQL + pgvector / SQLite (development)
+- **Authentication**: Supabase Auth with JWT validation
 - **ML/AI**: Hugging Face Transformers, Sentence Transformers
-- **Processing**: PyMuPDF, NLTK, scikit-learn
-- **Deployment**: Docker, Render
+- **Processing**: PyMuPDF, NLTK
+- **Deployment**: Render (Docker)
 
-### **Frontend**
+### Frontend
 - **Framework**: React 19 + TypeScript
-- **UI System**: Material UI 7 + custom premium theme
-- **Animation**: Framer Motion
-- **Authentication**: Supabase JS
-- **HTTP Client**: Axios
+- **UI**: Material UI 7 with custom premium theme
+- **Authentication**: Supabase JS Client
+- **HTTP**: Axios with JWT interceptor
 - **Deployment**: Vercel
 
-### **Infrastructure**
-- **Containerization**: Docker + Docker Compose
-- **CI/CD**: GitHub Actions
-- **Database**: PostgreSQL with pgvector extension
-- **Caching**: Redis
-- **Monitoring**: Health checks, logging
+---
+
+## 📊 Features
+
+### ✅ Core Features
+- **Document Upload** - PDF processing with real-time status
+- **AI Chat Assistant** - Query documents with context and citations
+- **AI Summarization** - RAG-powered document summarization
+- **User Authentication** - Secure Supabase authentication
+- **Document Management** - View and organize uploads
+
+### ✅ AI/ML Capabilities
+- **Embeddings** - Sentence transformers (384-dimensional)
+- **Vector Search** - Semantic similarity search
+- **Summarization** - Extractive summarization with RAG
+- **Document Processing** - PDF extraction and intelligent chunking
+
+### ✅ User Experience
+- **Modern UI** - Material UI with glassmorphism and gradients
+- **Responsive Design** - Mobile-ready interface
+- **Real-time Updates** - Live status tracking
+- **Professional UX** - Loading states, error handling
 
 ---
 
-## 📊 **Features**
+## 🔐 Authentication Flow
 
-### **✅ Core Features**
-- **Document Upload**: PDF processing with real-time status tracking
-- **Semantic Search**: Natural language search across all documents
-- **AI Chat Assistant**: Conversational interface to query documents with context
-- **AI Summarization**: RAG-powered document summarization
-- **User Authentication**: Secure login/signup with Supabase
-- **Document Management**: View, organize, and manage uploaded documents
+### How It Works
 
-### **✅ AI/ML Capabilities**
-- **Embeddings**: Sentence transformers for text embeddings
-- **Vector Search**: pgvector for efficient similarity search
-- **Summarization**: Extractive summarization with RAG logic
-- **Document Processing**: PDF text extraction and intelligent chunking
+1. **User logs in** via Supabase (frontend)
+2. **Supabase** issues JWT access token
+3. **Frontend** stores session in browser
+4. **Axios interceptor** attaches token to all API requests:
+   ```typescript
+   Authorization: Bearer <jwt_token>
+   ```
+5. **Backend** validates JWT with Supabase
+6. **Request succeeds** with authenticated user context
 
-### **✅ User Experience**
-- **Modern UI**: Elevated Material UI design system with glassmorphism, gradients, and premium typography
-- **Real-time Updates**: Live status tracking and notifications
-- **Mobile Ready**: Responsive design for all devices
-- **Professional UX**: Loading states, adaptive theming, rich feedback states
+### Implementation Details
+
+**Frontend** (`frontend/src/App.tsx`):
+```typescript
+// Axios interceptor gets fresh token from Supabase session
+apiClient.interceptors.request.use(async (config) => {
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token;
+  
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+```
+
+**Backend** (`app/services/auth.py`):
+```python
+# Strip 'Bearer ' prefix and validate with Supabase
+token = credentials.credentials
+if token.startswith('Bearer '):
+    token = token[7:]
+
+user_response = supabase_client.auth.get_user(token)
+```
 
 ---
 
-## 🔧 **API Endpoints**
+## 🔧 API Endpoints
 
-### **Authentication**
-- `POST /auth/supabase-callback` - Supabase authentication callback
+### Authentication
+- `POST /auth/supabase-callback` - Supabase auth callback
 
-### **Documents**
-- `GET /api/v1/documents` - List documents for the authenticated user
-- `POST /api/v1/documents/upload` - Upload PDF documents
+### Documents
+- `GET /api/v1/documents` - List user's documents
+- `POST /api/v1/documents/upload` - Upload PDF
 - `GET /api/v1/documents/{id}` - Get document metadata
-- `POST /api/v1/documents/search` - Semantic search
 - `POST /api/v1/documents/summarize` - AI summarization
 
-**Storage behavior:** Uploaded PDFs are persisted to Supabase Storage when `STORAGE_PROVIDER=supabase` is configured. During local development without Supabase credentials the API transparently falls back to disk writes under `data/uploads/`.
+### Chat
+- `POST /api/v1/chat` - Chat with documents (with citations)
 
-**Processing pipeline:** Document processing is dispatched via a Redis-backed RQ worker. If Redis is unavailable the API falls back to in-process background tasks, but production deployments should always run a dedicated worker.
+### Debug (Development)
+- `GET /api/debug/auth` - Debug authentication issues
 
-### **System**
-- `GET /` - Root endpoint with API information
-- `GET /health` - Health check endpoint
+### System
+- `GET /health` - Health check
 - `GET /docs` - API documentation (Swagger UI)
-- `GET /redoc` - Alternative API documentation
-- `GET /openapi.json` - OpenAPI specification
 
 ---
 
-## 🚀 **Deployment**
+## 🚀 Deployment
 
-### **Local Development**
+### Environment Variables
+
+**Backend (.env)**:
 ```bash
-# Backend
-make dev
+# Required
+SECRET_KEY=your-secret-key-here
+DATABASE_URL=postgresql://user:pass@host:port/db
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your-anon-public-key
+SUPABASE_JWT_SECRET=your-jwt-secret
 
-# Frontend
-cd frontend && npm run dev
+# Optional
+STORAGE_PROVIDER=local  # or 'supabase'
+REDIS_URL=redis://localhost:6379/0
 ```
 
-### **Production Deployment**
-
-#### **Backend (Render/Railway)**
+**Frontend (.env.local)**:
 ```bash
-# Set environment variables
-export SECRET_KEY="your-secret-key"
-export DATABASE_URL="postgresql://user:pass@host:port/db"
-export SUPABASE_URL="https://your-project.supabase.co"
-export SUPABASE_KEY="your-supabase-key"
-export SUPABASE_JWT_SECRET="your-jwt-secret"
-
-# Deploy using Docker
-./deploy.sh
+VITE_API_URL=https://your-backend.onrender.com
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-#### **Frontend (Vercel)**
+### Getting Supabase Credentials
+
+1. Go to [Supabase Dashboard](https://supabase.com/dashboard)
+2. Select your project
+3. Go to **Settings** → **API**
+4. Copy:
+   - **Project URL** → `SUPABASE_URL`
+   - **anon public** key → `SUPABASE_KEY` (frontend & backend)
+   - **JWT Secret** → `SUPABASE_JWT_SECRET` (backend only)
+
+### Deploy to Render (Backend)
+
+1. Connect GitHub repository
+2. Set environment variables (see above)
+3. Deploy with:
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+
+### Deploy to Vercel (Frontend)
+
 ```bash
 cd frontend
 npx vercel
 ```
 
-### **Docker Deployment**
+Set environment variables in Vercel dashboard.
+
+---
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+#### 1. **500 Internal Server Error on API requests**
+
+**Symptom**: All API calls return 500 error
+**Cause**: JWT authentication failure
+**Solution**:
+1. Check Render environment variables:
+   - `SUPABASE_URL` is set correctly
+   - `SUPABASE_KEY` is the **anon** key (not service_role)
+   - `SUPABASE_JWT_SECRET` matches your Supabase project
+2. Verify Vercel deployed latest frontend code
+3. Test with debug endpoint: `GET /api/debug/auth`
+
+#### 2. **"invalid JWT: token is malformed"**
+
+**Symptom**: Backend logs show JWT parsing errors
+**Cause**: Frontend not sending token or sending malformed token
+**Solution**:
+1. Check browser console for errors
+2. Verify user is logged in: `supabase.auth.getSession()`
+3. Ensure Vercel deployed latest frontend with Axios interceptor
+4. Clear browser cache and re-login
+
+#### 3. **File upload fails**
+
+**Symptom**: Upload returns error or hangs
+**Cause**: Database connection or storage issue
+**Solution**:
+1. Check `DATABASE_URL` is accessible from Render
+2. For local development, use SQLite: `DATABASE_URL=sqlite:///./test.db`
+3. Check Render logs for specific error
+4. Verify `STORAGE_PROVIDER` is set correctly
+
+#### 4. **Frontend build fails on Vercel**
+
+**Symptom**: TypeScript errors during build
+**Cause**: Missing props or type mismatches
+**Solution**:
+1. Check build logs for specific error
+2. Ensure all dependencies are installed
+3. Verify TypeScript version compatibility
+4. Run `npm run build` locally to test
+
+### Debug Commands
+
 ```bash
-# Development
-docker-compose up -d
+# Test authentication with curl
+curl -H "Authorization: Bearer YOUR_TOKEN" \
+  https://your-backend.onrender.com/api/debug/auth
 
-# Production
-docker-compose -f docker-compose.prod.yml up -d
-```
+# Check backend health
+curl https://your-backend.onrender.com/health
 
-
-## 🔒 **Environment Configuration**
-
-### **Backend (.env)**
-```bash
-SECRET_KEY=your-secret-key
-DATABASE_URL=postgresql://user:pass@host:port/db
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_KEY=your-supabase-key
-SUPABASE_JWT_SECRET=your-jwt-secret
-STORAGE_PROVIDER=supabase   # defaults to 'local' when omitted
-REDIS_URL=redis://localhost:6379/0
-```
-### **Frontend (.env.local)**
-```bash
-VITE_API_URL=http://localhost:8000
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
-
-### **Health Checks**
-```bash
-# Backend health
-curl http://localhost:8000/health
-
-# API root information
-curl http://localhost:8000/
-
-# API documentation (open in browser)
-open http://localhost:8000/docs
-```
-
-### **Background worker**
-```bash
-# start redis (if not already running)
-docker run --name redis -p 6379:6379 redis:7
-
-# start the RQ worker
-poetry run rq worker documents-processing
+# Get Supabase session token (browser console)
+supabase.auth.getSession().then(s => console.log(s.data.session.access_token))
 ```
 
 ---
 
-## 📈 **Performance & Monitoring**
+## 📚 Project Structure
 
-### **Health Monitoring**
-- **Health Endpoint**: `/health`
-- **API Documentation**: `/api/docs`
-- **Database Status**: PostgreSQL logs
-- **Application Logs**: Structured logging with timestamps
-
-### **Scaling Considerations**
-- **Database**: Use managed PostgreSQL with connection pooling
-- **Caching**: Redis for session and result caching
-- **Load Balancing**: Multiple API instances behind load balancer
-- **CDN**: Static assets served via CDN
-
----
-
-## 🔧 **Development Commands**
-
-### **Backend**
-```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Run migrations
-alembic upgrade head
-
-# Start development server
-make dev
-
-# Run tests
-make test
-
-# Lint code
-make lint
 ```
-
-### **Frontend**
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Run tests
-npm test
+DocuMind Project/
+├── app/                    # Backend (FastAPI)
+│   ├── api/               # API routes
+│   │   └── routers/       # Endpoint routers
+│   ├── core/              # Core configuration
+│   ├── models/            # Database models
+│   ├── services/          # Business logic
+│   └── ml/                # ML/AI modules
+├── frontend/              # Frontend (React)
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── types/         # TypeScript types
+│   │   └── lib/           # Utilities
+│   └── public/            # Static assets
+├── tests/                 # Backend tests
+├── scripts/               # Helper scripts
+├── .env.example           # Environment template
+└── README.md              # This file
 ```
 
 ---
 
-## 🐛 **Troubleshooting**
+## 🎉 Recent Updates
 
-### **Common Issues**
+### Latest Fixes (Nov 2024)
 
-1. **Backend won't start:**
-   - Check Python version (3.11+)
-   - Verify all dependencies installed
-   - Check environment variables
+✅ **JWT Authentication Fixed**
+- Added Axios interceptor to attach Supabase tokens
+- Backend now strips 'Bearer ' prefix correctly
+- Added debug endpoint for troubleshooting
 
-2. **Frontend build errors:**
-   - Update Node.js to 20.19+
-   - Clear `node_modules` and reinstall
-   - Ensure Material UI and Emotion peer dependencies are installed (`npm install`)
+✅ **UI Improvements**
+- Removed semantic search feature
+- Enhanced AI Chat with citations and suggested questions
+- Improved text input boxes (multiline)
+- Better error messages and logging
 
-3. **Database connection failed:**
-   - Verify DATABASE_URL format
-   - Ensure PostgreSQL is running
-   - Check network connectivity
-
-### **Debug Commands**
-```bash
-# Check container status
-docker-compose ps
-
-# View logs
-docker-compose logs api
-
-# Restart services
-docker-compose restart
-```
+✅ **Backend Enhancements**
+- Comprehensive error handling and logging
+- SQLite support for local development
+- Better token validation
+- Improved document processing
 
 ---
 
-## 📚 **Documentation**
+## 📄 License
 
-- **API Documentation**: Available at `/api/docs` when the backend is running
-- **Frontend Design System**: Located in `frontend/src/theme.ts` (Material UI theme overrides)
-- **Code Documentation**: Inline docstrings and type hints
-- **Run Scripts**: See `scripts/run_backend.sh` for starting the API locally
-- **Architecture**: Review the sections above for component breakdowns
+MIT License - see LICENSE file for details
 
 ---
 
-## 🤝 **Contributing**
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests for new functionality
+4. Add tests
 5. Submit a pull request
 
 ---
 
-## 📄 **License**
+## 📞 Support
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-
-## 🎉 **Project Status**
-
-**✅ COMPLETE & PRODUCTION-READY**
-
-DocuMind is a fully functional, demo-ready AI Document Intelligence platform that showcases:
-
-### **✅ Backend Features Delivered**
-- **FastAPI REST API** with comprehensive error handling
-- **PostgreSQL + pgvector** for semantic search capabilities
-- **Supabase Storage Integration** with local development fallback
-- **Redis + RQ Queue System** for resilient document processing
-- **JWT Authentication** with Supabase integration
-- **Comprehensive Test Suite** (18 tests, 100% pass rate, 61% coverage)
-- **Auto-generated API Documentation** at `/docs`
-
-### **✅ Frontend Features Delivered**
-- **React 19 + TypeScript** with modern hooks
-- **Material UI 7** with premium design system
-- **Lazy-loaded Components** for optimal performance
-- **Responsive Design** for all device sizes
-- **Real-time Status Updates** and notifications
-- **Professional UX** with loading states and error handling
-
-### **✅ AI/ML Capabilities**
-- **Semantic Search** using sentence transformers
-- **Document Processing** with PDF text extraction
-- **Vector Embeddings** (384-dimensional)
-- **Intelligent Chunking** for optimal search results
-- **RAG-powered Summarization** (ready for implementation)
-
-### **✅ Production Infrastructure**
-- **Docker Support** with multi-stage builds
-- **Environment Configuration** with validation
-- **Health Monitoring** and structured logging
-- **CORS Configuration** for cross-origin requests
-- **Rate Limiting** and security middleware
-- **Background Job Processing** with queue management
-
-### **🚀 Currently Running**
-- **Backend API**: http://localhost:8000
-- **Frontend App**: http://localhost:5173
-- **API Documentation**: http://localhost:8000/docs
-- **Health Check**: http://localhost:8000/health
-
-**Ready for demonstration as a complete, professional AI Document Intelligence platform! 🚀**
-
----
-
-## 📞 **Support**
-
-For questions, issues, or contributions, please:
-- Check the troubleshooting section above
-- Review the API documentation
+For issues or questions:
+- Check troubleshooting section above
+- Review API documentation at `/docs`
 - Open an issue on GitHub
-- Contact the development team
 
-**Status: ✅ **PROJECT COMPLETE - READY FOR DEMO!** 🎉**
+---
+
+**Status: ✅ PRODUCTION-READY** 🚀
+
+DocuMind is a complete, professional AI Document Intelligence platform ready for deployment and demonstration!
